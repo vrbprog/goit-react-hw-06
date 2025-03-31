@@ -1,17 +1,25 @@
 import s from "./ContactForm.module.css";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
+import { useDispatch } from "react-redux";
+import { addContact } from "../../redux/contactsSlice";
+import { v4 as uuidv4 } from "uuid";
 
 const INITIAL_STATE = {
     name: "",
     number: "",
 };
 
-const ContactForm = ({ adder }) => {
+const ContactForm = () => {
+    const dispatch = useDispatch();
     const handleSubmit = (value, actions) => {
-        adder(value);
+        const newContact = {
+            id: uuidv4(),
+            name: value.name,
+            number: value.number,
+        };
+        dispatch(addContact(newContact));
         actions.resetForm();
-        console.log("Submit!!!");
     };
 
     const validSchema = Yup.object().shape({
